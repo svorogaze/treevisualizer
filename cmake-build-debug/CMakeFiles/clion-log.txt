@@ -1,0 +1,4 @@
+/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/home/kosmarik/apps/clion-2021.3.3/bin/ninja/linux/ninja -DCMAKE_CXX_COMPILER=/bin/g++ -G Ninja /home/kosmarik/CLionProjects/game_of_life
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/kosmarik/CLionProjects/game_of_life/cmake-build-debug
