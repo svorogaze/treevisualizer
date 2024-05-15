@@ -55,6 +55,36 @@ build CMakeFiles/game_of_life.dir/main.cpp.o: CXX_COMPILER__game_of_life_unscann
   OBJECT_DIR = CMakeFiles/game_of_life.dir
   OBJECT_FILE_DIR = CMakeFiles/game_of_life.dir
 
+build CMakeFiles/game_of_life.dir/treap.cpp.o: CXX_COMPILER__game_of_life_unscanned_Debug /home/kosmarik/CLionProjects/game_of_life/treap.cpp || cmake_object_order_depends_target_game_of_life
+  DEP_FILE = CMakeFiles/game_of_life.dir/treap.cpp.o.d
+  FLAGS = -g -fsanitize=address,undefined
+  OBJECT_DIR = CMakeFiles/game_of_life.dir
+  OBJECT_FILE_DIR = CMakeFiles/game_of_life.dir
+
+build CMakeFiles/game_of_life.dir/avl.cpp.o: CXX_COMPILER__game_of_life_unscanned_Debug /home/kosmarik/CLionProjects/game_of_life/avl.cpp || cmake_object_order_depends_target_game_of_life
+  DEP_FILE = CMakeFiles/game_of_life.dir/avl.cpp.o.d
+  FLAGS = -g -fsanitize=address,undefined
+  OBJECT_DIR = CMakeFiles/game_of_life.dir
+  OBJECT_FILE_DIR = CMakeFiles/game_of_life.dir
+
+build CMakeFiles/game_of_life.dir/splay.cpp.o: CXX_COMPILER__game_of_life_unscanned_Debug /home/kosmarik/CLionProjects/game_of_life/splay.cpp || cmake_object_order_depends_target_game_of_life
+  DEP_FILE = CMakeFiles/game_of_life.dir/splay.cpp.o.d
+  FLAGS = -g -fsanitize=address,undefined
+  OBJECT_DIR = CMakeFiles/game_of_life.dir
+  OBJECT_FILE_DIR = CMakeFiles/game_of_life.dir
+
+build CMakeFiles/game_of_life.dir/handler.cpp.o: CXX_COMPILER__game_of_life_unscanned_Debug /home/kosmarik/CLionProjects/game_of_life/handler.cpp || cmake_object_order_depends_target_game_of_life
+  DEP_FILE = CMakeFiles/game_of_life.dir/handler.cpp.o.d
+  FLAGS = -g -fsanitize=address,undefined
+  OBJECT_DIR = CMakeFiles/game_of_life.dir
+  OBJECT_FILE_DIR = CMakeFiles/game_of_life.dir
+
+build CMakeFiles/game_of_life.dir/rbtree.cpp.o: CXX_COMPILER__game_of_life_unscanned_Debug /home/kosmarik/CLionProjects/game_of_life/rbtree.cpp || cmake_object_order_depends_target_game_of_life
+  DEP_FILE = CMakeFiles/game_of_life.dir/rbtree.cpp.o.d
+  FLAGS = -g -fsanitize=address,undefined
+  OBJECT_DIR = CMakeFiles/game_of_life.dir
+  OBJECT_FILE_DIR = CMakeFiles/game_of_life.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target game_of_life
@@ -63,7 +93,7 @@ build CMakeFiles/game_of_life.dir/main.cpp.o: CXX_COMPILER__game_of_life_unscann
 #############################################
 # Link the executable game_of_life
 
-build game_of_life: CXX_EXECUTABLE_LINKER__game_of_life_Debug CMakeFiles/game_of_life.dir/main.cpp.o
+build game_of_life: CXX_EXECUTABLE_LINKER__game_of_life_Debug CMakeFiles/game_of_life.dir/main.cpp.o CMakeFiles/game_of_life.dir/treap.cpp.o CMakeFiles/game_of_life.dir/avl.cpp.o CMakeFiles/game_of_life.dir/splay.cpp.o CMakeFiles/game_of_life.dir/handler.cpp.o CMakeFiles/game_of_life.dir/rbtree.cpp.o
   FLAGS = -g
   LINK_FLAGS = -fsanitize=address,undefined
   LINK_LIBRARIES = -lsfml-graphics  -lsfml-window  -lsfml-system
