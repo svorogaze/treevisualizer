@@ -140,4 +140,5 @@ Node* RBtree::erase(Node* v, long long val) {
 void RBtree::erase(long long x) {
     if (!exists(x)) return;
     root = erase(root, x);
+    if (root) root->red = false;
 }

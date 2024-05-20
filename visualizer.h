@@ -44,22 +44,23 @@ int getwidth(T *v) {
 std::vector<std::pair<sf::Vector2f, sf::Vector2f>> segs;
 
 void drawsegment(sf::Vector2f a, sf::Vector2f b) {
-    a.y += 10, b.y += 10;
-    a.x += 5, b.x += 5;
+    //a.y += 10, b.y += 10;
+    //a.x += 5, b.x += 5;
+    a.x += CURRAD, a.y += CURRAD;b.x += CURRAD, b.y += CURRAD;
     segs.push_back({a, b});
 }
-
+long long curc = 1020;
 template<typename T>
 std::vector<Circle<T>> arrange_tree(T *v, int h, long double addx, long double curw) {
     std::vector<Circle<T>> result;
     curcnt[h]++;
     long double wl = 0, wr = 0;
     if (!v->l && !v->r) {
-        result.push_back({v, curw / 2 + addx, ((long double)1020 / cntw.rbegin()->first) * h});
+        result.push_back({v, curw / 2 + addx, ((long double)curc / cntw.rbegin()->first) * h});
     } else {
         wl = (curw - 2 * CURRAD) * ((long double) getwidth(v->l) / (getwidth(v->l) + getwidth(v->r)));
         wr = (curw - 2 * CURRAD) * ((long double) getwidth(v->r) / (getwidth(v->l) + getwidth(v->r)));
-        result.push_back({v, wl + CURRAD + addx, ((long double)1020 / cntw.rbegin()->first) * h});
+        result.push_back({v, wl + CURRAD + addx, ((long double)curc / cntw.rbegin()->first) * h});
     }
     if (v->l) {
         auto r1 = arrange_tree(v->l, h + 1, addx, wl);
@@ -75,20 +76,25 @@ std::vector<Circle<T>> arrange_tree(T *v, int h, long double addx, long double c
 }
 
 template<typename T>
-void drawtree(T tree, sf::RenderWindow &w, bool rendervalues, bool renderpriority) {
+void drawtree(T tree, sf::RenderWindow &w, bool rendervalues, bool renderpriority, long double curcoef) {
     if (!tree.root) {
         return;
     }
     cntw = {};
     calcsize(tree.root, 0);
-    CURRAD = std::max(30 - tree.root->sz / 3, 10);
+    curc = 200 * cntw.rbegin()->first;
     segs.clear();
-    auto pnt = arrange_tree(tree.root, 0, 0, 1800);
+    long long prefcoef = curcoef;
+    //curcoef += tree.root->sz / 7.5;
+    //if (tree.root->sz > 50) curcoef *= 1.5;
+    //if (tree.root->sz > 150) curcoef *= 1.25;
+    //curc =
+    auto pnt = arrange_tree(tree.root, 0, 0, 1800 + curcoef * tree.root->sz);
     sf::CircleShape basic(CURRAD);
     basic.setOutlineColor(sf::Color(255, 255, 255));
     basic.setOutlineThickness(2.5);
     basic.setFillColor(sf::Color(0, 0, 0));
-    basic.setPointCount(10000);
+    basic.setPointCount(1000);
     for (auto i: segs) {
         sf::Vertex line[] =
                 {
@@ -134,4 +140,5 @@ void drawtree(T tree, sf::RenderWindow &w, bool rendervalues, bool renderpriorit
         text.setPosition(i.x - (long double)rs.width / 2 + CURRAD, i.y - (long double)rs.height / 2 + CURRAD / 1.25);
         w.draw(text);
     }
+    curcoef = prefcoef;
 }

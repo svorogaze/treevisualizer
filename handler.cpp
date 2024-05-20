@@ -11,6 +11,8 @@
 #include <exception>
 
 Handler::Handler() : w(sf::VideoMode(1920, 1080), "tree visualizer") {
+    curview.setSize(sf::Vector2f(1920, 1080));
+    curview.setCenter(1920 / 2, 1080 / 2);
 }
 
 
@@ -100,10 +102,18 @@ void Handler::HandleEvent() {
         } else if (!rendertext && event.type == sf::Event::MouseButtonPressed &&
                    event.mouseButton.button == sf::Mouse::Right) {
             long long val = -1337;
-            int x = event.mouseButton.x, y = event.mouseButton.y;
+            sf::Vector2i vec(event.mouseButton.x, event.mouseButton.y);
+
+            int x = w.mapPixelToCoords(vec).x, y = w.mapPixelToCoords(vec).y;
+
             std::cout << x << ' ' << y << '\n';
+            if (!treap.root) continue;
             if (curt == 0) {
-                auto pn = arrange_tree(treap.root, 0, 0, 1800);
+                calcsize(treap.root, 0);
+                auto pn = arrange_tree(treap.root, 0, 0, 1800 + curcoef * treap.root->sz);
+                if (pn.size() == 1) {
+                    pn[0].y = 540;
+                }
                 for (auto i: pn) {
                     if ((x - (i.x + CURRAD)) * (x - (i.x + CURRAD)) + (y - (i.y + CURRAD)) * (y - (i.y + CURRAD)) <=
                         CURRAD * CURRAD) {
@@ -112,7 +122,10 @@ void Handler::HandleEvent() {
                     }
                 }
             } else if (curt == 1) {
-                auto pn = arrange_tree(splay.root, 0, 0, 1800);
+                auto pn = arrange_tree(splay.root, 0, 0, 1800 + curcoef * splay.root->sz);
+                if (pn.size() == 1) {
+                    pn[0].y = 540;
+                }
                 for (auto i: pn) {
                     if ((x - (i.x + CURRAD)) * (x - (i.x + CURRAD)) + (y - (i.y + CURRAD)) * (y - (i.y + CURRAD)) <=
                         CURRAD * CURRAD) {
@@ -121,7 +134,10 @@ void Handler::HandleEvent() {
                     }
                 }
             } else if (curt == 2) {
-                auto pn = arrange_tree(avl.root, 0, 0, 1800);
+                auto pn = arrange_tree(avl.root, 0, 0, 1800 + curcoef * avl.root->sz);
+                if (pn.size() == 1) {
+                    pn[0].y = 540;
+                }
                 for (auto i: pn) {
                     if ((x - (i.x + CURRAD)) * (x - (i.x + CURRAD)) + (y - (i.y + CURRAD)) * (y - (i.y + CURRAD)) <=
                         CURRAD * CURRAD) {
@@ -130,7 +146,10 @@ void Handler::HandleEvent() {
                     }
                 }
             } else if (curt == 3) {
-                auto pn = arrange_tree(rbtree.root, 0, 0, 1800);
+                auto pn = arrange_tree(rbtree.root, 0, 0, 1800 + curcoef * rbtree.root->sz);
+                if (pn.size() == 1) {
+                    pn[0].y = 540;
+                }
                 for (auto i: pn) {
                     if ((x - (i.x + CURRAD)) * (x - (i.x + CURRAD)) + (y - (i.y + CURRAD)) * (y - (i.y + CURRAD)) <=
                         CURRAD * CURRAD) {
@@ -146,23 +165,43 @@ void Handler::HandleEvent() {
                 rbtree.erase(val);
                 st.erase(val);
             }
+        } else if (!rendertext && event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::Equal || event.key.code == sf::Keyboard::Add)) {
+            curview.zoom(0.9);
+        } else if (!rendertext && event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::Subtract || event.key.code == sf::Keyboard::Dash)) {
+            curview.zoom(1.1);
+        } else if (!rendertext && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Left) {
+            curview.move(sf::Vector2f(-0.1 * curview.getSize().x, 0));
+        } else if (!rendertext && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right) {
+            curview.move(sf::Vector2f(0.1 * curview.getSize().x, 0));
+        } else if (!rendertext && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Up) {
+            curview.move(sf::Vector2f(0, -0.1 * curview.getSize().y));
+        }  else if (!rendertext && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Down) {
+            curview.move(sf::Vector2f(0, 0.1 * curview.getSize().y));
+        } else if (!rendertext && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::A) {
+            curcoef *= 1.05;
+        } else if (!rendertext && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::D) {
+            curcoef /= 1.05;
         }
+
     }
 }
 
 
 void Handler::DrawTree() {
     w.clear();
+    w.setView(curview);
     if (curt == 0) {
-        drawtree(treap, w, rendervalues, renderpriority);
+        drawtree(treap, w, rendervalues, renderpriority, curcoef);
     } else if (curt == 1) {
-        drawtree(splay, w, rendervalues, renderpriority);
+        drawtree(splay, w, rendervalues, renderpriority, curcoef);
     } else if (curt == 2) {
-        drawtree(avl, w, rendervalues, renderpriority);
+        drawtree(avl, w, rendervalues, renderpriority, curcoef);
     } else if (curt == 3) {
-        drawtree(rbtree, w, rendervalues, renderpriority);
+        drawtree(rbtree, w, rendervalues, renderpriority, curcoef);
     }
     if (rendertext) {
+        command.box.setSize(sf::Vector2f(curview.getSize().x, ((float)300 / 1080) * curview.getSize().y));
+        command.box.setPosition(curview.getCenter().x - curview.getSize().x / 2, curview.getCenter().y - curview.getSize().y * 0.15);
         command.drawbox(w);
     }
     w.display();

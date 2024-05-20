@@ -16,6 +16,9 @@ public:
     sf::RenderWindow w;
     std::mt19937 we;
     TextBox command;
+    sf::View curview;
+    long double curcoef = 2;
+    bool changed = false;
     bool rendertext = false;
     bool renderpriority = false;
     bool rendervalues = true;
